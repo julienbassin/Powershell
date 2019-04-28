@@ -1,0 +1,7 @@
+﻿[CmdletBinding()]
+Param(
+
+    [string[]]$DNSServers
+
+)
+
