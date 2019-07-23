@@ -1,21 +1,16 @@
 Function Get-NTFSRights{
     [cmdletbinding()]
 
+    [OutputType(PSCustomObject)]
     Param(
         #tester la presence du repertoire et vérifier que c'est bien un repertoire
         # Parameter help description
-        [Parameter(ValueFromPipeline=$true)]
-        [ValidateScript({Test-Path -Path $PSItem -IsValid})]
-        [string]$Folder,
         [Parameter(ValueFromPipeline=$true)]
         [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
         [string[]]$Folders,
         #tester la presence du fichier et vérifier que c'est bien un fichier
         [Parameter(ValueFromPipeline=$true)]
-        [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
-        [string]$File,
-        [Parameter(ValueFromPipeline=$true)]
-        [ValidateScript({Test-Path -Path $PSItem -IsValid})]
+        [ValidateScript({{Test-Path -Path $PSItem -PathType Container -IsValid}})]
         [string[]]$Files,
         #recurse ?
         [switch]$Recurse,
