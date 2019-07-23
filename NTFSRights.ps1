@@ -3,22 +3,17 @@ Function Get-NTFSRights{
 
     #[OutputType(PSCustomObject)]
     Param(
-        #tester la presence du repertoire et vérifier que c'est bien un repertoire
-        # Parameter help description
+
         [Parameter(ValueFromPipeline=$true)]
         [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
         [string[]]$Folder,
-        #tester la presence du fichier et vérifier que c'est bien un fichier
         [Parameter(ValueFromPipeline=$true)]
-        [ValidateScript({{Test-Path -Path $PSItem -PathType Container -IsValid}})]
+        [ValidateScript({{Test-Path -Path $PSItem -IsValid}})]
         [string[]]$File,
-        #recurse ?
         [switch]$Recurse,
-        #Récupère les SACL
         [switch]$Audit
     )
 
-    #vérifier en amont que c'est un dossier ou un fichier
     #Si tu tentes d'accéder au répertoire, a-t-on les droits ? sinon renvoyer un message disant que tu n as pas les droits
     #choix entre l'API DOTNET ou import-module ?
     #Construire un splatting en fonction des informations qu'on a
@@ -41,7 +36,7 @@ Function Get-NTFSRights{
 }
 
 Function Set-NTFSRights{
-    [cmdletbinding()]
+    [Cmdletbinding()]
 
     Param(
         #tester la presence du repertoire et vérifier que c'est bien un repertoire
@@ -49,19 +44,13 @@ Function Set-NTFSRights{
         #Vérification des droits en remote sur une machine
         #vérificaiton des droits en remote via jobs, runspaces ?
         # Parameter help description
-        [Parameter()]
-        [ValidateScript()]
-        [string]$Folder,
-        [Parameter()]
-        [ValidateScript()]
-        [string[]]$Folders,
-        #tester la presence du fichier et vérifier que c'est bien un fichier
-        [Parameter()]
-        [ValidateScript()]
-        [string[]]$Files,
-        [Parameter()]
-        [ValidateScript()]
-        [string]$File,
+        [Parameter(ValueFromPipeline=$true)]
+        [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
+        [string[]]$Folder,
+        [Parameter(ValueFromPipeline=$true)]
+        [ValidateScript({{Test-Path -Path $PSItem -IsValid}})]
+        [string[]]$File,
+        [switch]$Recurse,
         #Récupère les SACLs
         [switch]$Audit
     )
@@ -69,48 +58,36 @@ Function Set-NTFSRights{
 }
 
 Function Add-NTFSRights{
-    [cmdletbinding()]
+    [Cmdletbinding()]
 
     Param(
         #tester la presence du repertoire et vérifier que c'est bien un repertoire
         # Parameter help description
-        [Parameter()]
-        [ValidateScript()]
-        [string]$Folder,
-        [Parameter()]
-        [ValidateScript()]
-        [string[]]$Folders,
-        #tester la presence du fichier et vérifier que c'est bien un fichier
-        [Parameter()]
-        [ValidateScript()]
-        [string[]]$Files,
-        [Parameter()]
-        [ValidateScript()]
-        [string]$File,
+        [Parameter(ValueFromPipeline=$true)]
+        [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
+        [string[]]$Folder,
+        [Parameter(ValueFromPipeline=$true)]
+        [ValidateScript({{Test-Path -Path $PSItem -IsValid}})]
+        [string[]]$File,
+        [switch]$Recurse,
         [switch]$Audit
     )
 
 }
 
 Function Remove-NTFSRights{
-    [cmdletbinding()]
+    [Cmdletbinding()]
 
     Param(
         #tester la presence du repertoire et vérifier que c'est bien un repertoire
         # Parameter help description
-        [Parameter()]
-        [ValidateScript()]
-        [string]$Folder,
-        [Parameter()]
-        [ValidateScript()]
-        [string[]]$Folders,
-        #tester la presence du fichier et vérifier que c'est bien un fichier
-        [Parameter()]
-        [ValidateScript()]
-        [string[]]$Files,
-        [Parameter()]
-        [ValidateScript()]
-        [string]$File,
+        [Parameter(ValueFromPipeline=$true)]
+        [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
+        [string[]]$Folder,
+        [Parameter(ValueFromPipeline=$true)]
+        [ValidateScript({{Test-Path -Path $PSItem -IsValid}})]
+        [string[]]$File,
+        [switch]$Recurse,
         [switch]$Audit
     )
 
