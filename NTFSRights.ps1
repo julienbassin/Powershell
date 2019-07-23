@@ -1,17 +1,17 @@
 Function Get-NTFSRights{
     [cmdletbinding()]
 
-    [OutputType(PSCustomObject)]
+    #[OutputType(PSCustomObject)]
     Param(
         #tester la presence du repertoire et vérifier que c'est bien un repertoire
         # Parameter help description
         [Parameter(ValueFromPipeline=$true)]
         [ValidateScript({Test-Path -Path $PSItem -PathType Container -IsValid})]
-        [string[]]$Folders,
+        [string[]]$Folder,
         #tester la presence du fichier et vérifier que c'est bien un fichier
         [Parameter(ValueFromPipeline=$true)]
         [ValidateScript({{Test-Path -Path $PSItem -PathType Container -IsValid}})]
-        [string[]]$Files,
+        [string[]]$File,
         #recurse ?
         [switch]$Recurse,
         #Récupère les SACL
@@ -26,7 +26,7 @@ Function Get-NTFSRights{
     #les afficher en console
     #Exporter le résultat dans un fichier excel avec ImportExcel ou CSV pour les linuxiens
 
-    $Directories = Get-ChildItem -Path $Folder
+    $Directories = Get-ChildItem -Path $Folders
     foreach($Directory in $Directories){
         $Acls = Get-Acl -Path $Directory.FullName
         foreach ($Acl in $Acls) {
