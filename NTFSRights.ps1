@@ -21,17 +21,19 @@ Function Get-NTFSRights{
     #les afficher en console
     #Exporter le résultat dans un fichier excel avec ImportExcel ou CSV pour les linuxiens
     #splatting à tester si c'est un folder ou fichier
+    $ACLCustom = [System.Collections.ArrayList]@()
     $Directories = Get-ChildItem -Path $Folder
     foreach($Directory in $Directories){
         $Acls = Get-Acl -Path $Directory.FullName
         foreach ($Acl in $Acls) {
-            $ACLCustom = [PSCustomObject]@{
+            $obj = [PSCustomObject]@{
                 FolderPath = $Directory.FullName
                 Owner = $Acl.Owner
                 NTFSRights = $Acl.AccessToString
             }
+            $ACLCustom +=$obj
         }
-        $ACLCustom
+        $ACLCustom | Export-Csv -Path C:\Users\fdofj\Desktop\report-acl.csv -NoTypeInformation
     }
 }
 
@@ -60,7 +62,7 @@ Function Set-NTFSRights{
 
     #splatting à tester si c'est un folder ou fichier
     $Acl = Get-Acl -Path $Folder
-    $ACE =  New-Object Security.AccessControl.FileSystemAccessRule("test", "FullControl","ContainerInherit, ObjectInherit","None","Allow")
+    $ACE =  New-Object Security.AccessControl.FileSystemAccessRule($Account, $Rights,"ContainerInherit, ObjectInherit","None",$Permission)
     $Acl.SetAccessRule($ACE)
     Set-Acl -Path $Folder -AclObject $Acl
 
