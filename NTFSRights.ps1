@@ -20,18 +20,18 @@ Function Get-NTFSRights{
     #Récupérer les ACLs
     #les afficher en console
     #Exporter le résultat dans un fichier excel avec ImportExcel ou CSV pour les linuxiens
-
-    $Directories = Get-ChildItem -Path $Folders
+    #splatting à tester si c'est un folder ou fichier
+    $Directories = Get-ChildItem -Path $Folder
     foreach($Directory in $Directories){
         $Acls = Get-Acl -Path $Directory.FullName
         foreach ($Acl in $Acls) {
-            $obj = [PSCustomObject]@{
+            $ACLCustom = [PSCustomObject]@{
                 FolderPath = $Directory.FullName
                 Owner = $Acl.Owner
                 NTFSRights = $Acl.AccessToString
             }
         }
-        $obj
+        $ACLCustom
     }
 }
 
@@ -39,8 +39,6 @@ Function Set-NTFSRights{
     [Cmdletbinding()]
 
     Param(
-        #tester la presence du repertoire et vérifier que c'est bien un repertoire
-        #Vérification des droits en local sur une machine
         #Vérification des droits en remote sur une machine
         #vérificaiton des droits en remote via jobs, runspaces ?
         # Parameter help description
@@ -50,10 +48,21 @@ Function Set-NTFSRights{
         [Parameter(ValueFromPipeline=$true)]
         [ValidateScript({{Test-Path -Path $PSItem -IsValid}})]
         [string[]]$File,
+        #[Parameter()]
+        [string[]]$Account,
+        #[Parameter()]
+        [string[]]$Rights = "Read",
+        #[Parameter()]
+        [string[]]$Permission = "Allow",
         [switch]$Recurse,
-        #Récupère les SACLs
         [switch]$Audit
     )
+
+    #splatting à tester si c'est un folder ou fichier
+    $Acl = Get-Acl -Path $Folder
+    $ACE =  New-Object Security.AccessControl.FileSystemAccessRule("test", "FullControl","ContainerInherit, ObjectInherit","None","Allow")
+    $Acl.SetAccessRule($ACE)
+    Set-Acl -Path $Folder -AclObject $Acl
 
 }
 
