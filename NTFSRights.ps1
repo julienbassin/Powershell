@@ -17,19 +17,18 @@ Function Get-NTFSRights{
     #Si tu tentes d'accéder au répertoire, a-t-on les droits ? sinon renvoyer un message disant que tu n as pas les droits
     #choix entre l'API DOTNET ou import-module ?
     #Construire un splatting en fonction des informations qu'on a
-    #Récupérer les ACLs
-    #les afficher en console
-    #Exporter le résultat dans un fichier excel avec ImportExcel ou CSV pour les linuxiens
+    #récupérer la liste des droits avancées
     #splatting à tester si c'est un folder ou fichier
     $ACLCustom = [System.Collections.ArrayList]@()
     $Directories = Get-ChildItem -Path $Folder
     foreach($Directory in $Directories){
         $Acls = Get-Acl -Path $Directory.FullName
-        foreach ($Acl in $Acls) {
+        foreach ($Access in $Acls.Access) {
             $obj = [PSCustomObject]@{
-                FolderPath = $Directory.FullName
-                Owner = $Acl.Owner
-                NTFSRights = $Acl.AccessToString
+                "FolderPath" = $Directory.FullName
+                "Group/Users" = $Access.IdentityReference
+                "Permissions"= $Access.FileSystemRights
+                "Inherited"= $Access.IsInherited
             }
             $ACLCustom +=$obj
         }
