@@ -1,4 +1,5 @@
 Function Test-Module{
+    [CmdletBinding()]
     # Parameter help description
     Param(
         [Parameter(Mandatory=$false)]

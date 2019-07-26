@@ -19,6 +19,9 @@ Function Get-NTFSRights{
     #Construire un splatting en fonction des informations qu'on a
     #récupérer la liste des droits avancées
     #splatting à tester si c'est un folder ou fichier
+    #voir la limite du fonctionnel -> prochain step utilisation des class powershell
+    #idem pour ADSIPS
+    #idem pour n'importe quel drive
     $ACLCustom = [System.Collections.ArrayList]@()
     $Directories = Get-ChildItem -Path $Folder
     foreach($Directory in $Directories){
@@ -32,7 +35,7 @@ Function Get-NTFSRights{
             }
             $ACLCustom +=$obj
         }
-        $ACLCustom | Export-Csv -Path C:\Users\fdofj\Desktop\report-acl.csv -NoTypeInformation
+        $ACLCustom
     }
 }
 
@@ -101,5 +104,16 @@ Function Remove-NTFSRights{
         [switch]$Audit
     )
 
+
+}
+
+Function Export-NTFSRights{
+    [CmdletBinding()]
+
+    Param()
+
+    #utilisation du module PSHTML/UniversalDahsbord/CSV/EXCEL/JSON/YAML
+    #Proxy function ?
+    #ParemterSetName ?
 
 }
